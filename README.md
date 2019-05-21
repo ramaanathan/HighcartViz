@@ -1,4 +1,4 @@
-# HighcartViz
+# Highchart Visualizations
 Visualizations using Highcharts and Highmaps
 
 
