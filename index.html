@@ -1,10 +1,21 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 <!--Your HighCharts libraries come next - make sure each one only appears once! -->
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script> 
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
+
+<!-- for geomaps -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+<script src="http://code.highcharts.com/maps/modules/map.js"></script> 
+<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
+
+<!-- for all other charts-->
+<script src="https://code.highcharts.com/modules/exporting.js"></script> 
+<script src="https://code.highcharts.com/modules/data.js"></script>
 <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 <script src="https://code.highcharts.com/modules/treemap.js"></script>
 <script src="https://code.highcharts.com/modules/funnel.js"></script>
@@ -14,7 +25,9 @@
 <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 <script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
 
+
 <!--Your divs which are placeholders for the charts go here. -->
+<div id="geomap_dark_ID" style=" margin:50 auto"></div>
 <div id="barchart_dark_ID"></div>
 <div id="piechart_dark_ID" style="margin: 50 auto"></div>
 <div id="sidebysidebar_dark_ID" style=" margin: 50 auto"></div>
@@ -25,18 +38,10 @@
 <div id="treemap_color_dark_ID" style=" margin:50 auto"></div>
 <div id="treemap_levels_dark_ID" style=" margin:50 auto"></div>
 <div id="guagemap_dark_ID" style=" margin:50 auto"></div>
-<div id="geomap_dark_ID" style=" margin:50 auto"></div>
 <div id="histogram_dark_ID" style=" margin:50 auto"></div>
-
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
-
-<!-- Finally, your JavaScript with instructions for creating the charts and which divs to place them in go last. This must be wrapped in <script></script> tags! -->
-
-
 
 
 <script>
-
   /*********************************************************************************************************/
   /*                          CUSTOM THEME FOR DARK BACKGROUNDS                                            */
   /*********************************************************************************************************/
@@ -52,7 +57,7 @@
             color: '#F0F0F0',
             fontSize: '25px',
 	    fontWeight: 'bold',
-	    fontFamily : 'Open+Sans'
+	    fontFamily : 'open sans'
         },
 	floating: true,
 	align: "center",
@@ -66,93 +71,127 @@
           },
 	y:50,
 	align: "center"
-    },
+    }
+  };
 
-    legend: {
-        itemStyle: {
-            font: '12pt',
-	    fontFamily : 'open sans',
-            color: '#F0F0F0'
-        },
-        itemHoverStyle:{
-            color: 'gray'
-        },
-        layout: 'horizontal',
-        align: 'center',
-        verticalAlign: 'bottom',
-        floating: false,
-        backgroundColor: '#282828'
- 
-    },
-      xAxis: {
-        crosshair: true,
-	labels: {
-            style: {
-                color: '#F0F0F0'
-            }
-        },
-	lineColor: '#89939B',  <!-- axis line at origin of plot -->
-	lineWidth: 1       <!-- make axis line visible  -->
-
-    },
-     yAxis: {
-         min: 0,
-	 gridLineColor: '#89939B', 
-	 labels: {
-            style: {
-                color: '#F0F0F0'
-            }
-         },
-	 lineColor: '#89939B',
-	 lineWidth: 1,
-         title: {
-	    style: {"color": '#F0F0F0'}
-         }
-
-    },
-    plotOptions: {
-        labels : {
-	    "color":'#F0F0F0'
-	},
-	column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        },
-	pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-                enabled: true,
-                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-		shape: null,
-                style: {
-		    color: '#F0F0F0'
-                },
-                connectorColor: 'silver'
-            }
-        },
-	line: {
-            dataLabels: {
-                enabled: false  // set this to true to display values on the line plot
-            },
-            enableMouseTracking: true
-        },
-	guage: {
-	    dataLabels: {
-                enabled: true,
-                style: {
-		    color: '#F0F0F0'
-                }
-	    }
-	},
-    },
-      credits: {
-        enabled: false
-    },
-};
-
-// Apply the theme
+  // Apply the theme
 Highcharts.setOptions(Highcharts.theme);
+
+
+/*********************************************************************************************************/
+  /*                          Geographic Map with Bubbles                                                  */
+  /*********************************************************************************************************/
+
+  var H = Highcharts,
+    map = H.maps['countries/us/us-all'],
+    chart;
+
+// Add series with state capital bubbles
+$.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/us-capitals.json', function (json) {
+    var data = [];
+    $.each(json, function () {
+        this.z = this.population;
+        data.push(this);
+    });
+
+    chart = Highcharts.mapChart('geomap_dark_ID', {
+        title: {
+            text: 'Highmaps lat/lon demo'
+        },
+
+        tooltip: {
+            pointFormat: '{point.capital}, {point.parentState}<br>' +
+                'Lat: {point.lat}<br>' +
+                'Lon: {point.lon}<br>' +
+                'Population: {point.population}'
+        },
+
+        xAxis: {
+            crosshair: {
+                zIndex: 5,
+                dashStyle: 'dot',
+                snap: false,
+                color: 'gray'
+            }
+        },
+
+        yAxis: {
+            crosshair: {
+                zIndex: 5,
+                dashStyle: 'dot',
+                snap: false,
+                color: 'gray'
+            }
+        },
+
+        series: [{
+            name: 'Basemap',
+            mapData: map,
+            borderColor: '#606060',
+            nullColor:  "#D8D8D8", //'rgba(200, 200, 200, 0.2)',
+            showInLegend: false
+        }, {
+            name: 'Separators',
+            type: 'mapline',
+            data: H.geojson(map, 'mapline'),
+            color: '#101010',
+            enableMouseTracking: false,
+            showInLegend: false
+        }, {
+            type: 'mapbubble',
+            dataLabels: {
+                enabled: true,
+                format: '{point.capital}',
+		style: {
+		    textOutline: false,
+		    color: 'black'
+		}
+            },
+            name: 'Cities',
+            data: data,
+            maxSize: '12%',
+            color: H.getOptions().colors[0]
+	    
+        }]
+    });
+});
+
+// Display custom label with lat/lon next to crosshairs
+$('#container').mousemove(function (e) {
+    var position;
+    if (chart) {
+        if (!chart.lab) {
+            chart.lab = chart.renderer.text('', 0, 0)
+                .attr({
+                    zIndex: 5
+                })
+                .css({
+                    color: '#505050'
+                })
+                .add();
+        }
+
+        e = chart.pointer.normalize(e);
+        position = chart.fromPointToLatLon({
+            x: chart.xAxis[0].toValue(e.chartX),
+            y: chart.yAxis[0].toValue(e.chartY)
+        });
+
+        chart.lab.attr({
+            x: e.chartX + 5,
+            y: e.chartY - 22,
+            text: 'Lat: ' + position.lat.toFixed(2) + '<br>Lon: ' + position.lon.toFixed(2)
+        });
+    }
+});
+
+$('#container').mouseout(function () {
+    if (chart && chart.lab) {
+        chart.lab.destroy();
+        chart.lab = null;
+    }
+});
+
 
 
 
@@ -789,7 +828,7 @@ Highcharts.chart('histogram_dark_ID', {
         data: [[30000,0], [40000,1], [50000,9], [60000,14], [70000,17], [80000,15], [90000,11], [100000,7], [110000,5], [120000,3], [130000,2], [140000,2], [150000,1]],
     }]
 });
-</script>
-
-
   
+  </script>
+
+
