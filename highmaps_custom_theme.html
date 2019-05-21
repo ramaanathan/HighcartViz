@@ -1,0 +1,162 @@
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
+
+<div id="geomap_dark_ID" style=" margin:50 auto"></div>
+
+<script>
+  /*********************************************************************************************************/
+  /*                          CUSTOM THEME FOR DARK BACKGROUNDS                                            */
+  /*********************************************************************************************************/
+  Highcharts.theme = {
+      colors: ['#0BB7FB',"#7ED321","#F5A623",'#FF62C2','#0D8DD4',"#00BC6F","#FF485E","#EB1414",
+		     "#0BB75B","#F0F0F0","#D8D8D8","#89939B","#697B89","#282828"],
+    chart: {
+        backgroundColor: '#282828',
+	marginTop: 100
+    },
+    title: {
+        style: {
+            color: '#F0F0F0',
+            fontSize: '25px',
+	    fontWeight: 'bold',
+	    fontFamily : 'open sans'
+        },
+	floating: true,
+	align: "center",
+	y: 10
+    },
+    subtitle: {
+        style: {
+            color: '#89939B', //'#666666',
+            fontSize: '18px',
+	    fontFamily : 'open sans'
+          },
+	y:50,
+	align: "center"
+    }
+  };
+
+  // Apply the theme
+Highcharts.setOptions(Highcharts.theme);
+
+/*********************************************************************************************************/
+  /*                          Geographic Map with Bubbles                                                  */
+  /*********************************************************************************************************/
+
+  var H = Highcharts,
+    map = H.maps['countries/us/us-all'],
+    chart;
+
+// Add series with state capital bubbles
+$.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/us-capitals.json', function (json) {
+    var data = [];
+    $.each(json, function () {
+        this.z = this.population;
+        data.push(this);
+    });
+
+    chart = Highcharts.mapChart('geomap_dark_ID', {
+        title: {
+            text: 'Highmaps lat/lon demo'
+        },
+
+        tooltip: {
+            pointFormat: '{point.capital}, {point.parentState}<br>' +
+                'Lat: {point.lat}<br>' +
+                'Lon: {point.lon}<br>' +
+                'Population: {point.population}'
+        },
+
+        xAxis: {
+            crosshair: {
+                zIndex: 5,
+                dashStyle: 'dot',
+                snap: false,
+                color: 'gray'
+            }
+        },
+
+        yAxis: {
+            crosshair: {
+                zIndex: 5,
+                dashStyle: 'dot',
+                snap: false,
+                color: 'gray'
+            }
+        },
+
+        series: [{
+            name: 'Basemap',
+            mapData: map,
+            borderColor: '#606060',
+            nullColor:  "#D8D8D8", //'rgba(200, 200, 200, 0.2)',
+            showInLegend: false
+        }, {
+            name: 'Separators',
+            type: 'mapline',
+            data: H.geojson(map, 'mapline'),
+            color: '#101010',
+            enableMouseTracking: false,
+            showInLegend: false
+        }, {
+            type: 'mapbubble',
+            dataLabels: {
+                enabled: true,
+                format: '{point.capital}',
+		style: {
+		    textOutline: false,
+		    color: 'black'
+		}
+            },
+            name: 'Cities',
+            data: data,
+            maxSize: '12%',
+            color: H.getOptions().colors[0]
+	    
+        }]
+    });
+});
+
+// Display custom label with lat/lon next to crosshairs
+$('#container').mousemove(function (e) {
+    var position;
+    if (chart) {
+        if (!chart.lab) {
+            chart.lab = chart.renderer.text('', 0, 0)
+                .attr({
+                    zIndex: 5
+                })
+                .css({
+                    color: '#505050'
+                })
+                .add();
+        }
+
+        e = chart.pointer.normalize(e);
+        position = chart.fromPointToLatLon({
+            x: chart.xAxis[0].toValue(e.chartX),
+            y: chart.yAxis[0].toValue(e.chartY)
+        });
+
+        chart.lab.attr({
+            x: e.chartX + 5,
+            y: e.chartY - 22,
+            text: 'Lat: ' + position.lat.toFixed(2) + '<br>Lon: ' + position.lon.toFixed(2)
+        });
+    }
+});
+
+$('#container').mouseout(function () {
+    if (chart && chart.lab) {
+        chart.lab.destroy();
+        chart.lab = null;
+    }
+});
+
+
+</script>
+
