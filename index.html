@@ -40,8 +40,9 @@
 <div id="guagemap_dark_ID" style=" margin:50 auto"></div>
 <div id="histogram_dark_ID" style=" margin:50 auto"></div>
 
-
+<!-- @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);-->
 <script>
+ 
   /*********************************************************************************************************/
   /*                          CUSTOM THEME FOR DARK BACKGROUNDS                                            */
   /*********************************************************************************************************/
@@ -57,7 +58,7 @@
             color: '#F0F0F0',
             fontSize: '25px',
 	    fontWeight: 'bold',
-	    fontFamily : 'open sans'
+	    fontFamily : 'Open Sans'
         },
 	floating: true,
 	align: "center",
@@ -71,11 +72,94 @@
           },
 	y:50,
 	align: "center"
-    }
-  };
+    },
 
-  // Apply the theme
+    legend: {
+        itemStyle: {
+            font: '12pt',
+	    fontFamily : 'Open Sans',
+            color: '#F0F0F0'
+        },
+        itemHoverStyle:{
+            color: 'gray'
+        },
+        layout: 'horizontal',
+        align: 'center',
+        verticalAlign: 'bottom',
+        floating: false,
+        backgroundColor: '#282828'
+ 
+    },
+      /*xAxis: {
+        //crosshair: true,
+	labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+        },
+	lineColor: '#89939B',  <!-- axis line at origin of plot -->
+	lineWidth: 1       <!-- make axis line visible  -->
+
+    },
+     yAxis: {
+         min: 0,
+	 gridLineColor: '#89939B', 
+	 labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+         },
+	 lineColor: '#89939B',
+	 lineWidth: 1,
+         title: {
+	    style: {"color": '#F0F0F0'}
+         }
+
+    },*/
+    plotOptions: {
+        labels : {
+	    "color":'#F0F0F0'
+	},
+	column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        },
+	pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+		shape: null,
+                style: {
+		    color: '#F0F0F0'
+                },
+                connectorColor: 'silver'
+            }
+        },
+	line: {
+            dataLabels: {
+                enabled: false  // set this to true to display values on the line plot
+            },
+            enableMouseTracking: true
+        },
+	solidguage: {
+	    dataLabels: {
+                enabled: true,
+                style: {
+		    color: '#F0F0F0'
+                }
+	    }
+	},
+    },
+      credits: {
+        enabled: false
+    },
+};
+
+// Apply the theme
 Highcharts.setOptions(Highcharts.theme);
+
 
 
 /*********************************************************************************************************/
@@ -215,12 +299,30 @@ $('#container').mouseout(function () {
             'Boxplot Analytics',
             'Watermills',
             'Romaguera Inc'        
-        ]
+        ],
+	labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+        },
+	lineColor: '#89939B',  <!-- axis line at origin of plot -->
+	lineWidth: 1       <!-- make axis line visible  -->
+
     },
      yAxis: {
          title: {
-            text: 'Number of Employees'
-        }
+             text: 'Number of Employees',
+	     style: {"color": '#F0F0F0'}
+         },
+	 min: 0,
+	 gridLineColor: '#89939B', 
+	 labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+         },
+	 lineColor: '#89939B',
+	 lineWidth: 1
     },
     series: [{
 	name: 'Companies',
@@ -275,12 +377,32 @@ $('#container').mouseout(function () {
         categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
         title: {
             text: null
-        }
+        },
+	crosshair: true,
+	labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+        },
+	lineColor: '#89939B',  <!-- axis line at origin of plot -->
+	lineWidth: 1       <!-- make axis line visible  -->
+
     },
     yAxis: {
         title: {
-            text: 'Population (millions)'
-        }
+            text: 'Population (millions)',
+	    style: {"color":'#F0F0F0'}
+        },
+	min: 0,
+	 gridLineColor: '#89939B', 
+	 labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+         },
+	 lineColor: '#89939B',
+	 lineWidth: 1,
+
     },
     tooltip: {
         valueSuffix: ' millions'
@@ -376,13 +498,31 @@ Highcharts.chart('lineplot_dark_ID', {
 
     yAxis: {
         title: {
-            text: 'Number of Employees'
-        }
+            text: 'Number of Employees',
+	    style:{"color":'#F0F0F0'}
+        },
+	 min: 0,
+	 gridLineColor: '#89939B', 
+	 labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+         },
+	 lineColor: '#89939B',
+	 lineWidth: 1,
+
     },
      xAxis: {
-	labels: {
-            rotation: -45
-        }
+	 crosshair: true,
+	 labels: {
+	    rotation: -45,
+            style: {
+                color: '#F0F0F0'
+            }
+        },
+	lineColor: '#89939B',  <!-- axis line at origin of plot -->
+	lineWidth: 1       <!-- make axis line visible  -->
+
      },
     plotOptions: {
         series: {
@@ -450,12 +590,31 @@ Highcharts.chart('lineplot_dark_ID', {
     },
 
     xAxis: {
-        categories: ['Alexander', 'Marie', 'Maximilian', 'Sophia', 'Lukas', 'Maria', 'Leon', 'Anna', 'Tim', 'Laura']
+        categories: ['Alexander', 'Marie', 'Maximilian', 'Sophia', 'Lukas', 'Maria', 'Leon', 'Anna', 'Tim', 'Laura'],
+	crosshair: true,
+	labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+        },
+	lineColor: '#89939B',  <!-- axis line at origin of plot -->
+	lineWidth: 1       <!-- make axis line visible  -->
+
     },
 
     yAxis: {
         categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        title: null
+        title: null,
+	min: 0,
+	 gridLineColor: '#89939B', 
+	 labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+         },
+	 lineColor: '#89939B',
+	 lineWidth: 1,
+
     },
 
     colorAxis: {
@@ -516,13 +675,32 @@ Highcharts.chart('lineplot_dark_ID', {
         text: 'Stacked Column Chart'
     },
     xAxis: {
-        categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+        categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas'],
+	crosshair: true,
+	labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+        },
+	lineColor: '#89939B',  <!-- axis line at origin of plot -->
+	lineWidth: 1       <!-- make axis line visible  -->
+
     },
     yAxis: {
         min: 0,
+	 gridLineColor: '#89939B', 
+	 labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+         },
+	 lineColor: '#89939B',
+	 lineWidth: 1,
         title: {
-            text: 'Total fruit consumption'
-        }
+	    text: 'Total Fruit Consumption',
+	    style: {"color": '#F0F0F0'}
+         }
+
     },
     tooltip: {
         pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
@@ -593,6 +771,7 @@ Highcharts.chart('treemap_color_dark_ID', {
 	    }
         }
     }],
+
     title: {
         text: 'Treemap with Color Axis'
     }
@@ -716,7 +895,17 @@ var gaugeOptions = {
     tooltip: {
         enabled: false
     },
+    /*xAxis: {
+	crosshair: true,
+	labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+        },
+	lineColor: '#89939B',  <!-- axis line at origin of plot -->
+	lineWidth: 1       <!-- make axis line visible  -->
 
+    },*/
     // the value axis
     yAxis: {
         stops: [
@@ -734,13 +923,16 @@ var gaugeOptions = {
             y: 16
         }
     },
-
     plotOptions: {
         solidgauge: {
             dataLabels: {
                 y: 5,
                 borderWidth: 0,
-                useHTML: true
+                useHTML: true,
+		enabled: true,
+		style: {
+		    color: '#F0F0F0'
+                }
             }
         }
     }
@@ -813,11 +1005,32 @@ Highcharts.chart('histogram_dark_ID', {
 		 style: {"color": "#F0F0F0"}
 	       },
         alignTicks: false,
+        crosshair: true,
+	labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+        },
+	lineColor: '#89939B',  <!-- axis line at origin of plot -->
+	lineWidth: 1       <!-- make axis line visible  -->
 
     }],
 
     yAxis: [{
-        title: { text: 'Frequency' }
+        title: {
+	    text: 'Frequency',
+	    style: {"color": '#F0F0F0'}
+	},
+	 min: 0,
+	 gridLineColor: '#89939B', 
+	 labels: {
+            style: {
+                color: '#F0F0F0'
+            }
+         },
+	 lineColor: '#89939B',
+	 lineWidth: 1
+
     }],
     legend: {
         enabled: false
